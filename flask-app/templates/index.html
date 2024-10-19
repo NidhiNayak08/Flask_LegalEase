@@ -244,16 +244,16 @@
         <div class="mid">
             <ul class="navbar-links">
                 <li><a href="/">Home</a></li>
-                <li><a href="/profile">Profile</a></li>
+                <!-- <li><a href="/profile">Profile</a></li> -->
                 <li><a href="/mydocs">My Docs</a></li>
                 <li><a href="/templates">Templates</a></li>
             </ul>
         </div>
         <div class="right">
-            <ul class="navbar-links">
+            <!-- <ul class="navbar-links">
                 <li><a href="/login">Login</a></li>
                 <li><a href="/signUp">Sign Up</a></li>
-            </ul>
+            </ul> -->
         </div>
     </nav>
     
@@ -267,7 +267,20 @@
             </div>
             <button type="submit" class="summarize-btn">Summarize</button>
         </form>
+         <!-- Section to show the uploaded PDF file name -->
+         <p id="file-name-display" style="margin-top: 20px; font-weight: bold;"></p>
     </div>
+    <script>
+        document.getElementById('pdf-file-input').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Display the PDF file name below the file input
+                document.getElementById('file-name-display').textContent = `Uploaded File: ${file.name}`;
+            } else {
+                document.getElementById('file-name-display').textContent = '';
+            }
+        });
+    </script>
 
     <!-- Features Section -->
     <div class="features-container">
@@ -284,10 +297,9 @@
 
             <div class="feature-box">
                 <i class="fas fa-search"></i>
-                <h3>Searchable Summaries</h3>
+                <h3>Save Summaries</h3>
                 <p>
-                    Summaries are searchable, allowing you to find key information
-                    effortlessly.
+                    Summaries can be saved, allowing you to easily keep track of your documents.
                 </p>
             </div>
 
