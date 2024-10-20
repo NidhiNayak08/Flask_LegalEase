@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f4f8;
@@ -21,54 +22,105 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         h1 {
-            color: #4e4376; /* Updated to match previous design */
+            color: #4e4376;
+            /* Updated to match previous design */
             font-size: 2.5rem;
             margin-bottom: 20px;
             text-align: center;
             font-weight: bold;
         }
-        
+
         p {
-            background-color: #fff; /* White background for the summary */
-            padding: 20px; /* Increased padding */
-            border-radius: 12px; /* Rounded corners */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            background-color: #fff;
+            /* White background for the summary */
+            padding: 20px;
+            /* Increased padding */
+            border-radius: 12px;
+            /* Rounded corners */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow */
             max-width: 900px;
             width: 100%;
-            margin-bottom: 30px; /* More space below the summary */
+            margin-bottom: 30px;
+            /* More space below the summary */
             line-height: 1.6;
             color: #555;
-            font-size: 1rem; /* Font size */
+            font-size: 1rem;
+            /* Font size */
         }
-        
+
         a {
             text-decoration: none;
             font-size: 1rem;
-            color: #4e4376; /* Updated to match previous design */
-            background-color: #fff; /* Button background */
-            border: 2px solid #4e4376; /* Button border color */
+            color: #4e4376;
+            /* Updated to match previous design */
+            background-color: #fff;
+            /* Button background */
+            border: 2px solid #4e4376;
+            /* Button border color */
             padding: 10px 15px;
             border-radius: 5px;
             transition: background-color 0.3s ease, color 0.3s ease;
-            display: inline-block; /* Make it block for padding */
+            display: inline-block;
+            /* Make it block for padding */
         }
-        
+
         a:hover {
-            background-color: #4e4376; /* Hover background color */
-            color: white; /* Hover text color */
+            background-color: #4e4376;
+            /* Hover background color */
+            color: white;
+            /* Hover text color */
         }
-        
+
         a:focus {
             outline: none;
         }
+
+        .highlight {
+            /* background-color: yellow; */
+            color: rgb(48, 48, 242);
+            font-weight: 700;
+            font-style: italic;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .highlight:hover::after {
+            content: attr(data-tooltip);
+            color: #4e4376;
+            position: absolute;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            /* Increased padding for the tooltip */
+            border-radius: 5px;
+            white-space: normal;
+            /* Allow text to wrap */
+            z-index: 100;
+            bottom: 120%;
+            /* Show the tooltip above the term */
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.9;
+            font-size: 12px;
+            min-width: 400px;
+            /* Set a maximum width for the tooltip */
+            word-wrap: break-word;
+            /* Allow long words to break and wrap */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* Subtle shadow for the tooltip */
+        }
     </style>
 </head>
+
 <body>
     <h1>Summary of the PDF</h1>
-    <p>{{ summary }}</p>
+    <p>{{ summary | safe }}</p>
     <a href="{{ url_for('index') }}">Go back</a>
+    <br>
     <a href="{{ url_for('my_docs') }}">View All Summaries</a>
 </body>
+
 </html>
