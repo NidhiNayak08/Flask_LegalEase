@@ -6,6 +6,8 @@ import os
 from rouge_score import rouge_scorer
 from bert_score import score
 from fpdf import FPDF
+from langchain_groq import ChatGroq
+import markdown
 
 app = Flask(__name__)
 
@@ -19,6 +21,8 @@ if not os.path.exists(SUMMARIES_DIR):
 # Load the tokenizer and model for Legal-BERT
 tokenizer = AutoTokenizer.from_pretrained("nlpaueb/legal-bert-small-uncased")
 model = AutoModelForTokenClassification.from_pretrained("nlpaueb/legal-bert-small-uncased")
+
+
 
 # Function to read a PDF document and extract text
 def extract_text_from_pdf(pdf_path):
@@ -72,13 +76,53 @@ def evaluate_summary_bert(reference_summary, generated_summary):
     P, R, F1 = score([generated_summary], [reference_summary], lang="en", verbose=True)
     return F1.mean().item()  # Return F1 score
 
+
+
+
+# Initialize the ChatGroq client (make sure to provide the API key properly)
+llm = ChatGroq(
+    model="llama3-8b-8192",
+    temperature=0.7,
+    max_tokens=None,
+    max_retries=2,
+    api_key="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" # Ensure your API key is set as an environment variable
+)
+
+def format_summary(summary_text):
+    messages = [
+        (
+            "system",
+            " You are a legal document summarizer formater , you will format the given summary by dividing it into sections like parties involved, facts, evidences, arguments and conclusions.And dont include the line that Here is the formted summary.",
+        ),
+        ("human", summary_text),
+    ]
+
+    # Call the Groq model to get the formatted summary
+    try:
+        ai_msg = llm.invoke(messages)
+        formatted_summary = ai_msg.content
+        markdown_text = formatted_summary
+        html = markdown.markdown(markdown_text)
+        return html
+    except Exception as e:
+        print(f"Error with  API: {e}")
+        return summary_text  # Fallback to original summary if API fails
+
+
 # Function to summarize a document with recursive chunks
 def summarize_document(text):
     cleaned_text = clean_text(text)
     chunks = recursive_chunk(cleaned_text, chunk_size=600)  # Adjusted chunk size
     chunk_summaries = summarize_chunks(chunks)
     final_summary = merge_summaries(chunk_summaries)
-    return final_summary
+
+    formatted_summary = format_summary(final_summary)
+    return formatted_summary
+
+    
+
+
+
 
 # Helper function to save summary as a PDF
 def save_summary_as_pdf(summary_text, summary_filename):
