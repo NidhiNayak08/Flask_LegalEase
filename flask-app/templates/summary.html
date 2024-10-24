@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Summary</title>
@@ -19,62 +18,63 @@
             font-family: Arial, sans-serif;
             background-color: #f0f4f8;
             display: flex;
+            justify-content: flex-start;
+            /* Align content to the left */
+            align-items: flex-start;
+            /* Align items to the left side */
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
             padding: 20px;
+            max-width: 1200px;
+            /* Set a max-width for the content */
+            margin: auto 10px;
+            /* Center the content horizontally on larger screens */
         }
 
         h1 {
             color: #4e4376;
-            /* Updated to match previous design */
             font-size: 2.5rem;
             margin-bottom: 20px;
             text-align: center;
+            /* Align text to the left */
             font-weight: bold;
+            width: 100%;
+            /* Ensure heading takes full width */
         }
 
         p {
             background-color: #fff;
-            /* White background for the summary */
-            padding: 20px;
-            /* Increased padding */
-            border-radius: 12px;
-            /* Rounded corners */
+            padding: 15px;
+            border-radius: 10px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            /* Subtle shadow */
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
-            margin-bottom: 30px;
-            /* More space below the summary */
+            margin: 15px 0px;
             line-height: 1.6;
             color: #555;
             font-size: 1rem;
-            /* Font size */
+            text-align: left;
+            /* Align text to the left */
         }
 
         a {
             text-decoration: none;
             font-size: 1rem;
             color: #4e4376;
-            /* Updated to match previous design */
             background-color: #fff;
-            /* Button background */
             border: 2px solid #4e4376;
-            /* Button border color */
             padding: 10px 15px;
             border-radius: 5px;
             transition: background-color 0.3s ease, color 0.3s ease;
             display: inline-block;
-            /* Make it block for padding */
+            margin-right: 10px;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         a:hover {
             background-color: #4e4376;
-            /* Hover background color */
             color: white;
-            /* Hover text color */
         }
 
         a:focus {
@@ -82,7 +82,6 @@
         }
 
         .highlight {
-            /* background-color: yellow; */
             color: rgb(48, 48, 242);
             font-weight: 700;
             font-style: italic;
@@ -97,34 +96,25 @@
             background-color: #ffffff;
             border: 1px solid #ccc;
             padding: 10px;
-            /* Increased padding for the tooltip */
             border-radius: 5px;
             white-space: normal;
-            /* Allow text to wrap */
             z-index: 100;
             bottom: 120%;
-            /* Show the tooltip above the term */
             left: 50%;
             transform: translateX(-50%);
             opacity: 0.9;
             font-size: 12px;
             min-width: 400px;
-            /* Set a maximum width for the tooltip */
             word-wrap: break-word;
-            /* Allow long words to break and wrap */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            /* Subtle shadow for the tooltip */
         }
     </style>
-  </head>
-  <body>
 </head>
 
 <body>
     <h1>Summary of the PDF</h1>
     <p>{{ summary | safe }}</p>
     <a href="{{ url_for('index') }}">Go back</a>
-    <br>
     <a href="{{ url_for('my_docs') }}">View All Summaries</a>
 </body>
 
