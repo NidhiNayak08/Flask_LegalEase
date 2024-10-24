@@ -8,6 +8,8 @@ from bert_score import score
 from fpdf import FPDF
 from langchain_groq import ChatGroq
 import markdown
+import json
+import re
 
 app = Flask(__name__)
 
@@ -31,6 +33,15 @@ def extract_text_from_pdf(pdf_path):
     for page in reader.pages:
         text += page.extract_text()
     return text.encode('utf-8', errors='replace').decode('utf-8')  # Ensures UTF-8 encoding
+
+# Load legal terms from a JSON file
+def load_legal_terms(json_file='legal_terms.json'):
+    with open(json_file, 'r') as f:
+        data = json.load(f)
+    return data['legal_terms']
+
+# Load legal terms when the application starts
+legal_terms = load_legal_terms()
 
 # Function to clean and process text using Legal-BERT
 def clean_text(text):
@@ -137,6 +148,13 @@ def save_summary_as_pdf(summary_text, summary_filename):
     # Save PDF to the summaries directory
     pdf.output(os.path.join(SUMMARIES_DIR, summary_filename))
 
+# Function to detect and highlight legal terms
+def detect_legal_terms(summary, legal_terms):
+    for term_entry in legal_terms:  # Iterate over the list of legal terms
+        term = term_entry['term']
+        definition = term_entry['meaning']
+        summary = re.sub(rf'\b{term}\b', f'<span class="highlight" data-tooltip="{definition}">{term}</span>', summary, flags=re.IGNORECASE)
+    return summary
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -169,6 +187,8 @@ def index():
             # Example reference summary (replace this with actual human reference summaries)
             reference_summary = "This is the reference summary for the document."  # Update with actual reference summary
 
+            highlighted_summary = detect_legal_terms(generated_summary, legal_terms)
+
             # Evaluate the generated summary
             rouge_scores = evaluate_summary_rouge(reference_summary, generated_summary)
             bert_score = evaluate_summary_bert(reference_summary, generated_summary)
@@ -192,7 +212,7 @@ def index():
             else:
                 print(f"File {file_path} not found for deletion")  # Debugging line if file is missing
             
-            return render_template('summary.html', summary=generated_summary)
+            return render_template('summary.html', summary=highlighted_summary)
     return render_template('index.html')
 
 @app.route('/mydocs')
