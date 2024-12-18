@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic D3 Tree</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+      h1 {
+        text-align: center;
+        color: #4e5d6c;
+        font-size: 28px;
+        margin-top: 30px;
+      }
+      #mindmap {
+        margin: 50px auto;
+        width: 90%;
+        max-width: 1500px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      svg {
+        display: block;
+        margin: 0 auto;
+      }
+      .node circle {
+        fill: #2e8b57;
+        stroke: #fff;
+        stroke-width: 3px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .node circle:hover {
+        fill: #4caf50;
+        transform: scale(1.2);
+      }
+      .node text {
+        font-size: 14px;
+        font-weight: 500;
+        fill: #333;
+        pointer-events: none;
+        text-transform: capitalize;
+        transition: opacity 0.3s ease;
+      }
+      .node text:hover {
+        opacity: 0.8;
+      }
+      .link {
+        fill: none;
+        stroke: #a9a9a9;
+        stroke-width: 2px;
+        transition: stroke 0.3s ease;
+      }
+      .link:hover {
+        stroke: #4caf50;
+      }
+      .link.path-enter {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+      }
+      .link.path-enter.active {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Dynamic D3 Mind Map</h1>
+
+    <div id="mindmap"></div>
+
+    <script>
+      const width = 1500;
+      const height = 600;
+
+      const svg = d3
+        .select("#mindmap")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(40, 0)");
+
+      // Fetch dynamic data from Flask endpoint
+      d3.json("/get_data").then(function (data) {
+        // Create a hierarchical structure
+        const root = d3.hierarchy(data);
+
+        // Create a tree layout
+        const treeLayout = d3.tree().size([height, width - 800]);
+        treeLayout(root);
+
+        // Add links (edges) between nodes
+        const links = svg
+          .selectAll(".link")
+          .data(root.links())
+          .enter()
+          .append("path")
+          .attr("class", "link")
+          .attr(
+            "d",
+            d3
+              .linkHorizontal()
+              .x((d) => d.y)
+              .y((d) => d.x)
+          );
+
+        // Add nodes
+        const node = svg
+          .selectAll(".node")
+          .data(root.descendants())
+          .enter()
+          .append("g")
+          .attr("class", "node")
+          .attr("transform", (d) => `translate(${d.y},${d.x})`);
+
+        // Add circles to nodes
+        node
+          .append("circle")
+          .attr("r", 12)
+          .attr("fill", "#2e8b57")
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 3);
+
+        // Add text labels to nodes
+        node
+          .append("text")
+          .attr("dx", 16)
+          .attr("dy", 4)
+          .text((d) => d.data.name)
+          .style("font-size", "14px")
+          .style("font-weight", "bold")
+          .style("fill", "#333");
+
+        // Add enter transition for links and nodes
+        links
+          .attr("class", "link path-enter")
+          .transition()
+          .duration(500)
+          .attr("class", "link");
+
+        node
+          .transition()
+          .duration(500)
+          .attr("transform", (d) => `translate(${d.y},${d.x})`);
+      });
+    </script>
+  </body>
+</html>

@@ -9,12 +9,17 @@ from fpdf import FPDF
 from langchain_groq import ChatGroq
 import markdown
 import json
-import re
+from flask import jsonify
+
 
 app = Flask(__name__)
 
 # Directory to store summaries
 SUMMARIES_DIR = 'summaries'
+
+
+# Global variable to store the formatted summary
+formatted_summary_store = None
 
 # Ensure the summaries directory exists
 if not os.path.exists(SUMMARIES_DIR):
@@ -33,15 +38,6 @@ def extract_text_from_pdf(pdf_path):
     for page in reader.pages:
         text += page.extract_text()
     return text.encode('utf-8', errors='replace').decode('utf-8')  # Ensures UTF-8 encoding
-
-# Load legal terms from a JSON file
-def load_legal_terms(json_file='legal_terms.json'):
-    with open(json_file, 'r') as f:
-        data = json.load(f)
-    return data['legal_terms']
-
-# Load legal terms when the application starts
-legal_terms = load_legal_terms()
 
 # Function to clean and process text using Legal-BERT
 def clean_text(text):
@@ -120,17 +116,88 @@ def format_summary(summary_text):
         return summary_text  # Fallback to original summary if API fails
 
 
+
+import json
+
+def generate_structured_summary(summarized_text):
+    # Example JSON structure for LLM
+    example_json_structure = {
+        "name": "Legal Case Summary",
+        "children": [
+            {
+                "name": "Parties Involved",
+                "children": [
+                    {"name": "Plaintiff: John Doe"},
+                    {"name": "Defendant: XYZ Corporation"}
+                ]
+            },
+            {
+                "name": "Issue or Dispute",
+                "children": [{"name": "Breach of Contract"}]
+            },
+            {
+                "name": "Key Arguments",
+                "children": [
+                    {"name": "Plaintiff: Claimed damages of $500,000"},
+                    {"name": "Defendant: Denied breach and counterclaimed"}
+                ]
+            },
+            {
+                "name": "Judgment/Resolution",
+                "children": [
+                    {"name": "Judgment in favor of Plaintiff with $300,000 damages"}
+                ]
+            }
+        ]
+    }
+
+    # Prompt for the LLM API
+    prompt = (
+        "You are a legal document formatter. Given the summarized text, "
+        "Convert it into a JSON format with the following structure: "
+        "I just want JSON object because I would be parsing it into JSON data, so strictly give Json format data."
+        " Include name, children, and nested details for 'Parties Involved', 'Issue or Dispute', "
+        "'Key Arguments', and 'Judgment/Resolution'. Match the content to the summarized text as closely as possible."
+    )
+
+    # Input to the LLM
+    messages = [
+        ("system", "You are a JSON formatter for legal document summaries."),
+        ("user", f"Summarized Text: {summarized_text}"),
+        ("user", f"Example JSON Structure: {json.dumps(example_json_structure, indent=2)}"),
+        ("user", prompt)
+    ]
+
+    try:
+        # Make the API call
+        ai_msg = llm.invoke(messages)
+        print(f"Raw response: {ai_msg.content}")
+
+    
+        structured_summary = json.loads(ai_msg.content)
+        return structured_summary
+
+    
+    except json.JSONDecodeError as e:
+        print(f"Failed to decode JSON from LLM response: {e}")
+        return {"error": "Failed to decode JSON response from LLM"}
+    
+    except Exception as e:
+        print(f"Error with LLM API: {e}")
+        return {"error": "Error invoking LLM API"}
+
+
 # Function to summarize a document with recursive chunks
 def summarize_document(text):
     cleaned_text = clean_text(text)
     chunks = recursive_chunk(cleaned_text, chunk_size=600)  # Adjusted chunk size
     chunk_summaries = summarize_chunks(chunks)
     final_summary = merge_summaries(chunk_summaries)
-
     formatted_summary = format_summary(final_summary)
     return formatted_summary
 
-    
+
+
 
 
 
@@ -148,13 +215,6 @@ def save_summary_as_pdf(summary_text, summary_filename):
     # Save PDF to the summaries directory
     pdf.output(os.path.join(SUMMARIES_DIR, summary_filename))
 
-# Function to detect and highlight legal terms
-def detect_legal_terms(summary, legal_terms):
-    for term_entry in legal_terms:  # Iterate over the list of legal terms
-        term = term_entry['term']
-        definition = term_entry['meaning']
-        summary = re.sub(rf'\b{term}\b', f'<span class="highlight" data-tooltip="{definition}">{term}</span>', summary, flags=re.IGNORECASE)
-    return summary
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -184,10 +244,12 @@ def index():
             # Summarize the document
             generated_summary = summarize_document(document_text)
 
+            # Update the global variable with the formatted summary
+            global formatted_summary_store
+            formatted_summary_store = generated_summary
+
             # Example reference summary (replace this with actual human reference summaries)
             reference_summary = "This is the reference summary for the document."  # Update with actual reference summary
-
-            highlighted_summary = detect_legal_terms(generated_summary, legal_terms)
 
             # Evaluate the generated summary
             rouge_scores = evaluate_summary_rouge(reference_summary, generated_summary)
@@ -212,7 +274,7 @@ def index():
             else:
                 print(f"File {file_path} not found for deletion")  # Debugging line if file is missing
             
-            return render_template('summary.html', summary=highlighted_summary)
+            return render_template('summary.html', summary=generated_summary)
     return render_template('index.html')
 
 @app.route('/mydocs')
@@ -227,6 +289,23 @@ def view_summary(summary_name):
     # Check if it's a PDF and send it to the user for download/viewing
     if summary_name.endswith('.pdf'):
         return send_from_directory(SUMMARIES_DIR, summary_name)
+
+@app.route("/get_data")
+def get_dynamic_data():
+    global formatted_summary_store  # Access the global variable
+
+    if not formatted_summary_store:
+        return jsonify({"error": "No summary available. Please upload and summarize a document first."}), 404
+
+    # Generate structured summary using the existing formatted summary
+    structured_data = generate_structured_summary(formatted_summary_store)
+    return jsonify(structured_data)
+
+
+@app.route("/mindmap")
+def mindmap():
+    return render_template('mindmap.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)
