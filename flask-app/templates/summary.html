@@ -70,6 +70,72 @@
         margin-bottom: 20px;
         text-align: center;
       }
+      form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+        margin: 20px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 1rem;
+      }
+
+      /* Label styling */
+      label {
+        font-weight: bold;
+        color: #4e4376;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+
+      /* Select dropdown styling */
+      select {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-size: 1rem;
+        color: #555;
+        background-color: #f9f9f9;
+        transition: border-color 0.3s ease;
+      }
+
+      select:focus {
+        border-color: #4e4376;
+        outline: none;
+      }
+
+      /* Button styling */
+      button {
+        background-color: #4e4376;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #6a58a6;
+        transform: scale(1.05);
+      }
+
+      /* Button focus */
+      button:focus {
+        outline: none;
+      }
+
+      /* Button alignment */
+      form button {
+        align-self: flex-start;
+      }
 
       a:hover {
         background-color: #4e4376;
@@ -116,6 +182,18 @@
     <!-- <button onclick="location.href='mindmap.html';">Generate Mind Map</button>
     <button onclick="location.href='{{ url_for('mindmap') }}';">Generate Mind Map</button>
      -->
+    <h1>Translate Summary</h1>
+
+    <form method="POST" action="/translate">
+      <label for="language">Select Language:</label>
+      <select id="language" name="target_language">
+        <option value="hi">Hindi</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <!-- Add more language options as needed -->
+      </select>
+      <button type="submit">Translate</button>
+    </form>
     <a href="{{ url_for('mindmap') }}">MindMap</a>
     <a href="{{ url_for('index') }}">Go back</a>
     <a href="{{ url_for('my_docs') }}">View All Summaries</a>

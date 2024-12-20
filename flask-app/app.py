@@ -10,6 +10,7 @@ from langchain_groq import ChatGroq
 import markdown
 import json
 from flask import jsonify
+from translate import translate_text
 
 
 app = Flask(__name__)
@@ -306,6 +307,29 @@ def get_dynamic_data():
 def mindmap():
     return render_template('mindmap.html')
 
+@app.route('/translate', methods=['GET', 'POST'])
+def translate_summary():
+    global formatted_summary_store  # Access the global formatted summary
 
+    if not formatted_summary_store:
+        return jsonify({"error": "No summary available. Please upload and summarize a document first."}), 404
+
+    if request.method == 'POST':
+        target_language = request.form.get('target_language')  # e.g., "hi" for Hindi
+
+        if not target_language:
+            return jsonify({"error": "Target language not specified."}), 400
+
+        try:
+            # Translate the formatted summary
+            translated_summary = translate_text(formatted_summary_store, target_language)
+
+            # Return the translated summary
+            return render_template('translated_summary.html', summary=translated_summary)
+        except Exception as e:
+            return jsonify({"error": f"Translation failed: {str(e)}"}), 500
+
+    # Render a form to select the target language
+    return render_template('translate.html')
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)
