@@ -11,6 +11,9 @@ import markdown
 import json
 from flask import jsonify
 from translate import translate_text
+import nltk
+# Download necessary NLTK data for sentence tokenization
+nltk.download('punkt')
 
 
 app = Flask(__name__)
@@ -30,8 +33,6 @@ if not os.path.exists(SUMMARIES_DIR):
 tokenizer = AutoTokenizer.from_pretrained("nlpaueb/legal-bert-small-uncased")
 model = AutoModelForTokenClassification.from_pretrained("nlpaueb/legal-bert-small-uncased")
 
-
-
 # Function to read a PDF document and extract text
 def extract_text_from_pdf(pdf_path):
     reader = PdfReader(pdf_path)
@@ -40,25 +41,62 @@ def extract_text_from_pdf(pdf_path):
         text += page.extract_text()
     return text.encode('utf-8', errors='replace').decode('utf-8')  # Ensures UTF-8 encoding
 
+# Load legal terms from a JSON file
+def load_legal_terms(json_file='legal_terms.json'):
+    with open(json_file, 'r') as f:
+        data = json.load(f)
+    return data['legal_terms']
+
+# Load legal terms when the application starts
+legal_terms = load_legal_terms()
+
 # Function to clean and process text using Legal-BERT
 def clean_text(text):
     text = re.sub(r'\s+', ' ', text).strip()  # Remove extra whitespaces
     return text
 
 # Function to split text into overlapping recursive chunks
-def recursive_chunk(text, chunk_size=600, min_length=150):
-    words = text.split()
+def semantic_chunk(text, max_chunk_size=500, overlap_size=100):
+    sentences = nltk.sent_tokenize(text)
+    
     chunks = []
+    current_chunk = []
+    current_chunk_length = 0
     
-    if len(words) <= chunk_size:
-        return [text]
+    for sentence in sentences:
+        sentence_length = len(sentence.split())  # Count words in sentence
+        
+        # If adding this sentence exceeds the max chunk size
+        if current_chunk_length + sentence_length > max_chunk_size:
+            # Save current chunk if not empty
+            if current_chunk:
+                chunks.append(' '.join(current_chunk))
+            
+            # Start a new chunk with the current sentence
+            current_chunk = [sentence]
+            current_chunk_length = sentence_length
+        else:
+            # Otherwise, add the sentence to the current chunk
+            current_chunk.append(sentence)
+            current_chunk_length += sentence_length
+        
+        # If current chunk exceeds max size, push it and reset
+        if current_chunk_length >= max_chunk_size:
+            chunks.append(' '.join(current_chunk))
+            current_chunk = []  # Reset chunk for next sentences
+            current_chunk_length = 0
     
-    start = 0
-    while start < len(words):
-        end = min(start + chunk_size, len(words))
-        chunk = ' '.join(words[start:end])
-        chunks.append(chunk)
-        start += chunk_size // 2  # Half overlapping
+    # Add the last chunk if any sentences remain
+    if current_chunk:
+        chunks.append(' '.join(current_chunk))
+    
+    # Handle overlap: for example, keep the last `overlap_size` sentences in the next chunk
+    if len(chunks) > 1:
+        for i in range(1, len(chunks)):
+            # Add overlap by appending part of the previous chunk
+            overlap = chunks[i - 1].split()[-overlap_size:]
+            chunks[i] = ' '.join(overlap) + ' ' + chunks[i]
+    
     return chunks
 
 def summarize_chunks(chunks, max_length=150, min_length=40):
@@ -83,9 +121,6 @@ def evaluate_summary_rouge(reference_summary, generated_summary):
 def evaluate_summary_bert(reference_summary, generated_summary):
     P, R, F1 = score([generated_summary], [reference_summary], lang="en", verbose=True)
     return F1.mean().item()  # Return F1 score
-
-
-
 
 # Initialize the ChatGroq client (make sure to provide the API key properly)
 llm = ChatGroq(
@@ -115,11 +150,7 @@ def format_summary(summary_text):
     except Exception as e:
         print(f"Error with  API: {e}")
         return summary_text  # Fallback to original summary if API fails
-
-
-
-import json
-
+    
 def generate_structured_summary(summarized_text):
     # Example JSON structure for LLM
     example_json_structure = {
@@ -191,16 +222,11 @@ def generate_structured_summary(summarized_text):
 # Function to summarize a document with recursive chunks
 def summarize_document(text):
     cleaned_text = clean_text(text)
-    chunks = recursive_chunk(cleaned_text, chunk_size=600)  # Adjusted chunk size
+    chunks = semantic_chunk(cleaned_text, max_chunk_size=500, overlap_size=50)
     chunk_summaries = summarize_chunks(chunks)
     final_summary = merge_summaries(chunk_summaries)
     formatted_summary = format_summary(final_summary)
     return formatted_summary
-
-
-
-
-
 
 
 # Helper function to save summary as a PDF
@@ -216,6 +242,16 @@ def save_summary_as_pdf(summary_text, summary_filename):
     # Save PDF to the summaries directory
     pdf.output(os.path.join(SUMMARIES_DIR, summary_filename))
 
+# Function to detect and highlight legal terms
+def detect_legal_terms(summary, legal_terms):
+    for term_entry in legal_terms:  # Iterate over the list of legal terms
+        term = term_entry['term']
+        definition = term_entry['meaning']
+        # Highlight terms using re.sub, adding a span tag with a tooltip
+        pattern = rf'\b{re.escape(term)}\b'  # Use re.escape to safely escape special characters
+        replacement = rf'<span class="highlight" data-tooltip="{definition}">{term}</span>'
+        summary = re.sub(pattern, replacement, summary, flags=re.IGNORECASE)
+    return summary
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -244,17 +280,19 @@ def index():
             
             # Summarize the document
             generated_summary = summarize_document(document_text)
+            highlighted_summary = detect_legal_terms(generated_summary, legal_terms)
+
 
             # Update the global variable with the formatted summary
             global formatted_summary_store
-            formatted_summary_store = generated_summary
+            formatted_summary_store = highlighted_summary
 
             # Example reference summary (replace this with actual human reference summaries)
             reference_summary = "This is the reference summary for the document."  # Update with actual reference summary
 
             # Evaluate the generated summary
-            rouge_scores = evaluate_summary_rouge(reference_summary, generated_summary)
-            bert_score = evaluate_summary_bert(reference_summary, generated_summary)
+            rouge_scores = evaluate_summary_rouge(reference_summary, highlighted_summary)
+            bert_score = evaluate_summary_bert(reference_summary, highlighted_summary)
 
             # Print ROUGE and BERT scores to the terminal
             print("\nROUGE Scores:")
@@ -275,7 +313,7 @@ def index():
             else:
                 print(f"File {file_path} not found for deletion")  # Debugging line if file is missing
             
-            return render_template('summary.html', summary=generated_summary)
+            return render_template('summary.html', summary=highlighted_summary)
     return render_template('index.html')
 
 @app.route('/mydocs')
@@ -333,3 +371,4 @@ def translate_summary():
     return render_template('translate.html')
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)
+

@@ -89,10 +89,6 @@
       "meaning": "A court order to temporarily stop a legal proceeding or the enforcement of a judgment."
     },
     {
-      "term": "Sarpanch",
-      "meaning": "The head of a Panchayat, responsible for making decisions and leading the local governing body."
-    },
-    {
       "term": "Nyaya Panchayat",
       "meaning": "A system of local justice in rural areas of India that adjudicates minor disputes."
     },
@@ -113,10 +109,6 @@
       "meaning": "A type of lease in India, particularly in coal mining, granting rights for coal extraction on a specific piece of land."
     },
     {
-      "term": "Encroachment",
-      "meaning": "The act of intruding on someone else's property or rights, especially in the context of land or resources."
-    },
-    {
       "term": "Coal Mining Rights",
       "meaning": "Legal rights granted to individuals or companies to extract coal from a specified area."
     },
@@ -125,32 +117,368 @@
       "meaning": "A judicial officer in a lower court who has jurisdiction over certain types of cases."
     },
     {
-        "term": "Permanent Injunction",
-        "meaning": "A court order requiring a party to do or refrain from doing specific acts permanently."
+      "term": "Permanent Injunction",
+      "meaning": "A court order requiring a party to do or refrain from doing specific acts permanently."
     },
     {
-        "term": "Limitation Act",
-        "meaning": "A law that sets the maximum time period within which legal proceedings must be initiated."
+      "term": "Limitation Act",
+      "meaning": "A law that sets the maximum time period within which legal proceedings must be initiated."
     },
     {
-        "term": "Conversion",
-        "meaning": "An unlawful act of taking someone else's property and treating it as one's own."
+      "term": "Conversion",
+      "meaning": "An unlawful act of taking someone else's property and treating it as one's own."
     },
     {
-        "term": "Joint Workings",
-        "meaning": "Collaborative operations involving two or more parties, particularly in extracting resources like coal."
+      "term": "Joint Workings",
+      "meaning": "Collaborative operations involving two or more parties, particularly in extracting resources like coal."
     },
     {
-        "term": "Possession",
-        "meaning": "The state of having, owning, or controlling something, often used in legal contexts to establish rights to property."
+      "term": "Possession",
+      "meaning": "The state of having, owning, or controlling something, often used in legal contexts to establish rights to property."
     },
     {
-        "term": "Statutory Period",
-        "meaning": "A legally defined time frame within which certain legal actions must be taken."
+      "term": "Statutory Period",
+      "meaning": "A legally defined time frame within which certain legal actions must be taken."
     },
     {
-        "term": "Seam",
-        "meaning": "A layer of coal or other mineral in a mine."
+      "term": "Seam",
+      "meaning": "A layer of coal or other mineral in a mine."
+    },
+    {
+      "term": "Cognizance",
+      "meaning": "Judicial notice or acknowledgment of an offense to take action."
+    },
+    {
+      "term": "Prior sanction",
+      "meaning": "Approval required from an authority before initiating legal proceedings."
+    },
+    {
+      "term": "Competent authority",
+      "meaning": "A legally empowered body or individual to make decisions or grant approvals."
+    },
+    {
+      "term": "Impugned order",
+      "meaning": "An order that is being challenged or questioned in a legal proceeding."
+    },
+    {
+      "term": "Bar for taking cognizance",
+      "meaning": "Legal restriction on a court's ability to acknowledge a case."
+    },
+    {
+      "term": "Section 144 Cr.P.C.",
+      "meaning": "A section in the Code of Criminal Procedure to prohibit public gatherings for safety reasons."
+    },
+    {
+      "term": "Case diary",
+      "meaning": "Official record of investigation maintained by the police in a case."
+    },
+    {
+      "term": "Chargesheet",
+      "meaning": "A formal document of accusation prepared by law enforcement."
+    },
+    {
+      "term": "Quash proceedings",
+      "meaning": "To cancel or annul legal proceedings."
+    },
+    {
+      "term": "Section 482 Cr.P.C.",
+      "meaning": "Provision granting courts the power to prevent abuse of legal process."
+    },
+    {
+      "term": "Proceedings",
+      "meaning": "The process of conducting legal actions in a court."
+    },
+    {
+      "term": "Trial court",
+      "meaning": "The court where a case is initially heard and decided."
+    },
+    {
+      "term": "FIR (First Information Report)",
+      "meaning": "A written complaint or report registered by the police about a cognizable offense."
+    },
+    {
+      "term": "Adjudication",
+      "meaning": "The legal process of resolving a dispute or deciding a case."
+    },
+    {
+      "term": "Regularize",
+      "meaning": "To make something valid or official by following the necessary legal procedures."
+    },
+    {
+      "term": "Mop-up round",
+      "meaning": "A final round of seat allocation in admissions to fill vacant seats after regular counseling rounds."
+    },
+    {
+      "term": "Disciplinary proceedings",
+      "meaning": "Formal actions taken to investigate and penalize misconduct by officials or employees."
+    },
+    {
+      "term": "Respondent",
+      "meaning": "The party against whom a petition is filed in a court case."
+    },
+    {
+      "term": "Furnishing incorrect information",
+      "meaning": "Providing false or misleading details intentionally or unintentionally."
+    },
+
+    {
+      "term": "Arbitrary act",
+      "meaning": "An action taken without proper justification, fairness, or adherence to the law."
+    },
+    {
+      "term": "Writ petition",
+      "meaning": "A formal written request filed in court seeking legal remedy or enforcement of rights."
+    },
+    {
+      "term": "Per se illegal",
+      "meaning": "An act that is inherently unlawful and does not require further evidence to prove its illegality."
+    },
+    {
+      "term": "Sympathy of the Court",
+      "meaning": "Appealing to the court's sense of compassion rather than legal merit."
+    },
+    {
+      "term": "Callous",
+      "meaning": "Showing a lack of care or concern for others, often resulting in neglectful actions."
+    },
+    {
+      "term": "Prosecution",
+      "meaning": "The legal party responsible for presenting a case against the accused in a criminal trial."
+    },
+
+    {
+      "term": "POCSO Act",
+      "meaning": "The Protection of Children from Sexual Offenses Act, 2012, addressing sexual crimes against minors."
+    },
+    {
+      "term": "Victim Compensation Fund",
+      "meaning": "A fund established to compensate and rehabilitate victims of crimes."
+    },
+    {
+      "term": "Lenient view",
+      "meaning": "A less strict or less severe judgment or punishment."
+    },
+    {
+      "term": "Culpable act",
+      "meaning": "An action deserving blame or punishment under the law."
+    },
+    {
+      "term": "Writ Petition",
+      "meaning": "A formal written request submitted to a court seeking legal relief."
+    },
+    {
+      "term": "Constitutional Validity",
+      "meaning": "Compliance of a law or rule with the principles and provisions of the Constitution."
+    },
+    {
+      "term": "Intermediary",
+      "meaning": "An entity that facilitates communication or transactions between two parties, such as digital platforms and social media."
+    },
+    {
+      "term": "Arbitrary",
+      "meaning": "Actions or decisions based on personal discretion rather than any set standards or rules."
+    },
+    {
+      "term": "Ultra Vires",
+      "meaning": "Actions or rules that exceed the legal power or authority of an individual or entity."
+    },
+
+    {
+      "term": "Reasonable Restrictions",
+      "meaning": "Limits imposed on fundamental rights for maintaining public order, decency, or morality as allowed by law."
+    },
+    {
+      "term": "Article 19(1)(a)",
+      "meaning": "A provision in the Indian Constitution that guarantees freedom of speech and expression to citizens."
+    },
+    {
+      "term": "Article 19(1)(g)",
+      "meaning": "A provision in the Indian Constitution that guarantees the right to practice any profession, or to carry on any occupation, trade, or business."
+    },
+    {
+      "term": "Article 21",
+      "meaning": "A provision in the Indian Constitution guaranteeing the right to life and personal liberty."
+    },
+    {
+      "term": "Chilling Effect",
+      "meaning": "The discouragement of legitimate exercise of legal rights due to the fear of legal or regulatory action."
+    },
+    {
+      "term": "Oversight Mechanism",
+      "meaning": "A system or process established to supervise or regulate actions to ensure compliance with laws or policies."
+    },
+    {
+      "term": "Grievance Redressal Officer",
+      "meaning": "An official designated to handle complaints and resolve issues within an organization."
+    },
+
+    {
+      "term": "Review Committee",
+      "meaning": "A group of individuals tasked with reevaluating decisions or actions, often in a legal or administrative context."
+    },
+    {
+      "term": "Section 69A",
+      "meaning": "A provision in the IT Act that empowers the government to block public access to information in the interest of sovereignty, security, or public order."
+    },
+
+    {
+      "term": "Code of Ethics",
+      "meaning": "A set of principles or guidelines intended to govern professional or organizational behavior."
+    },
+
+    {
+      "term": "Manifestly Arbitrary",
+      "meaning": "A legal standard indicating that a decision lacks reasonable justification and is obviously unfair or unreasonable."
+    },
+
+    {
+      "term": "All India Quota (AIQ)",
+      "meaning": "A reservation system in Indian educational institutions where a percentage of seats is allocated at the national level, regardless of state-specific quotas."
+    },
+    {
+      "term": "Adultery",
+      "meaning": "Voluntary sexual relations between a married person and someone who is not their spouse."
+    },
+    {
+      "term": "Court Martial",
+      "meaning": "A judicial court for trying members of the armed services accused of offenses against military law."
+    },
+    {
+      "term": "Miscellaneous Application",
+      "meaning": "A legal filing seeking clarification, modification, or supplemental relief in a case already decided by the court."
+    },
+    {
+      "term": "Unbecoming Conduct",
+      "meaning": "Behavior by a member of the armed forces that is inappropriate or dishonorable and violates the expected standards of conduct."
+    },
+    {
+      "term": "Ground for Securing Dissolution of Marriage",
+      "meaning": "A legally recognized reason, such as adultery, for ending a marriage through divorce."
+    },
+    {
+      "term": "Patriarchal Connotations",
+      "meaning": "Social or legal implications that reflect a male-dominated societal structure, often leading to gender bias."
+    },
+    {
+      "term": "Section 45 of the Army Act, 1950",
+      "meaning": "A provision penalizing officers for conduct unbecoming of their position or character as expected of them."
+    },
+    {
+      "term": "Section 497 IPC",
+      "meaning": "An Indian Penal Code provision, struck down in 2018, that criminalized adultery but was considered to reflect patriarchal bias."
+    },
+    {
+      "term": "ASG (Additional Solicitor General)",
+      "meaning": "A senior law officer in India assisting the Attorney General in representing the government in legal matters."
+    },
+    {
+      "term": "Coordinate Bench",
+      "meaning": "A bench of judges in a court that is similarly constituted to hear the same or related matters, often when a matter is heard by more than one bench within the same court."
+    },
+
+    {
+      "term": "Remanded",
+      "meaning": "When a higher court sends a case back to a lower court for further proceedings, typically for reconsideration or additional actions in accordance with instructions from the higher court."
+    },
+    {
+      "term": "Impugned Notice",
+      "meaning": "A notice that is being challenged or disputed in a legal proceeding."
+    },
+    {
+      "term": "Bona Fides",
+      "meaning": "Bona fides refers to the good faith or genuine intention of a person, typically in legal or contractual matters."
+    },
+
+    {
+      "term": "Rule 12",
+      "meaning": "Rule 12 refers to a specific regulation in the Admit Card or the examination guidelines that governs a particular aspect of the exam process, such as identification or conduct."
+    },
+    {
+      "term": "Nexus",
+      "meaning": "Nexus refers to a connection or link between two or more entities or elements, often used to establish a relationship or connection in legal terms."
+    },
+    {
+      "term": "Malpractice",
+      "meaning": "Malpractice refers to unethical or illegal conduct, especially by professionals like teachers or examiners, which violates rules or standards."
+    },
+    {
+      "term": "Paucity of Time",
+      "meaning": "Paucity of time refers to a shortage or lack of sufficient time available to complete a task or action."
+    },
+    {
+      "term": "Momentary Lapse",
+      "meaning": "Momentary lapse refers to a brief or temporary failure or mistake made in a particular moment, which may not be indicative of a person's overall behavior."
+    },
+
+    {
+      "term": "Cause of Action",
+      "meaning": "A cause of action refers to the legal grounds or basis for a lawsuit or legal claim."
+    },
+    {
+      "term": "Limitation Act",
+      "meaning": "The Limitation Act sets out the maximum period within which a party can initiate legal proceedings. After this period expires, the right to sue may be barred."
+    },
+    {
+      "term": "Section 18 of the Limitation Act",
+      "meaning": "Section 18 of the Limitation Act allows for the extension of the limitation period if a party acknowledges its liability in writing."
+    },
+    {
+      "term": "Promise to Pay",
+      "meaning": "A promise to pay is a commitment or assurance made by a party to pay a debt, and under Section 25(3) of the Indian Contract Act, it can create a binding obligation."
+    },
+    {
+      "term": "Indian Contract Act, Section 25(3)",
+      "meaning": "Section 25(3) of the Indian Contract Act deals with promises made without consideration, which can still be enforceable if made in writing."
+    },
+    {
+      "term": "Arbitration Clause",
+      "meaning": "An arbitration clause is a provision in a contract that requires disputes to be resolved through arbitration instead of through litigation in court."
+    },
+    {
+      "term": "Section 34 of the A&C Act",
+      "meaning": "Section 34 of the Arbitration and Conciliation Act allows a party to challenge an arbitral award on certain grounds, such as if the award is in conflict with public policy."
+    },
+    {
+      "term": "Section 37 of the A&C Act",
+      "meaning": "Section 37 of the Arbitration and Conciliation Act deals with appeals against the orders made under Section 34, providing the legal framework for challenging the decisions of a Single Judge in arbitration matters."
+    },
+
+    {
+      "term": "Ex-facie Barred by Limitation",
+      "meaning": "Ex-facie barred by limitation refers to a case where, on the surface or based on the facts available, the legal claim is barred due to the expiration of the limitation period."
+    },
+    {
+      "term": "Contingent Entitlement",
+      "meaning": "Contingent entitlement refers to a right or claim that is dependent on a specific condition or event occurring, such as the payment of a subsidy."
+    },
+    {
+      "term": "Suo Motu",
+      "meaning": "A Latin term meaning 'on its own motion'. It refers to the act of a court taking cognizance of an issue or case without it being brought before it by any party."
+    },
+    {
+      "term": "Adjudicating",
+      "meaning": "The process of making a formal judgment or decision about a legal matter."
+    },
+
+    {
+      "term": "Flouting",
+      "meaning": "To openly disregard or disobey a law, rule, or convention."
+    },
+    {
+      "term": "Irregularity",
+      "meaning": "A deviation from what is standard, normal, or lawful, often referring to an error or misconduct in procedures."
+    },
+    {
+      "term": "Statutory Duties",
+      "meaning": "Duties imposed by a statute (a written law passed by a legislative body) that must be performed by the concerned party."
+    },
+    {
+      "term": "Depriving",
+      "meaning": "The act of taking away or denying something, often in the context of rights or privileges."
+    },
+    {
+      "term": "Nadapathal",
+      "meaning": "A traditional path or walkway in a temple, often leading to important areas such as the main sanctum or deity."
     }
   ]
 }
