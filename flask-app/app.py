@@ -12,9 +12,10 @@ import json
 from flask import jsonify
 from translate import translate_text
 import nltk
-# Download necessary NLTK data for sentence tokenization
-nltk.download('punkt')
+from transformers import T5Tokenizer, T5ForConditionalGeneration
 
+# Download necessary NLTK data for sentence tokenization
+nltk.download('punkt_tab')
 
 app = Flask(__name__)
 
@@ -30,8 +31,10 @@ if not os.path.exists(SUMMARIES_DIR):
     os.makedirs(SUMMARIES_DIR)
 
 # Load the tokenizer and model for Legal-BERT
-tokenizer = AutoTokenizer.from_pretrained("nlpaueb/legal-bert-small-uncased")
-model = AutoModelForTokenClassification.from_pretrained("nlpaueb/legal-bert-small-uncased")
+# tokenizer = AutoTokenizer.from_pretrained("nlpaueb/legal-bert-small-uncased")
+# model = AutoModelForTokenClassification.from_pretrained("nlpaueb/legal-bert-small-uncased")
+tokenizer = T5Tokenizer.from_pretrained("t5-small")  # Or your base model
+model = T5ForConditionalGeneration.from_pretrained("./fine_tuned_model")
 
 # Function to read a PDF document and extract text
 def extract_text_from_pdf(pdf_path):
@@ -99,11 +102,26 @@ def semantic_chunk(text, max_chunk_size=500, overlap_size=100):
     
     return chunks
 
+# def summarize_chunks(chunks, max_length=150, min_length=40):
+#     summarizer = pipeline('summarization', model='t5-small', framework='pt')
+#     summaries = []
+#     for chunk in chunks:
+#         summary = summarizer(chunk, max_length=max_length, min_length=min_length, do_sample=False)[0]['summary_text']
+#         summaries.append(summary)
+#     return summaries
 def summarize_chunks(chunks, max_length=150, min_length=40):
-    summarizer = pipeline('summarization', model='t5-small', framework='pt')
     summaries = []
     for chunk in chunks:
-        summary = summarizer(chunk, max_length=max_length, min_length=min_length, do_sample=False)[0]['summary_text']
+        inputs = tokenizer(chunk, return_tensors="pt", max_length=512, truncation=True)
+        outputs = model.generate(
+            inputs["input_ids"],
+            max_length=max_length,
+            min_length=min_length,
+            length_penalty=2.0,
+            num_beams=4,
+            early_stopping=True,
+        )
+        summary = tokenizer.decode(outputs[0], skip_special_tokens=True)
         summaries.append(summary)
     return summaries
 
@@ -371,4 +389,3 @@ def translate_summary():
     return render_template('translate.html')
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)
-
